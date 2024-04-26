@@ -12,7 +12,7 @@ const cors = require('cors')
 // header('Access-Control-Allow-Origin : Content-type, X-Auth-Token, Origin, Authorisation')
 
 app.use(cors({
-    origin:["http://localhost:3000"]
+    origin:["https://recipe-app-2be3.onrender.com/"]
 }))
 app.use(express.json())
 app.use(require('./router/auth'))
