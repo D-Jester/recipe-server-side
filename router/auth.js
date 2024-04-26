@@ -4,7 +4,7 @@ const express = require('express')
 const Router = express.Router();
 const cors = require('cors')
 Router.use(cors({
-    origin:["https://recipe-app-2be3.onrender.com/"]
+    origin:["https://recipe-app-2be3.onrender.com"]
 }))
 
 
