@@ -10,7 +10,7 @@ const cors = require('cors')
 app.use(express.json())
 app.use(require('./router/auth'))
 app.use(cors({
-    origin:"https://recipe-app-2be3.onrender.com"
+    origin:["*"]
 }))
 
 const PORT = process.env.PORT || 8000
