@@ -8,10 +8,10 @@ const cors = require('cors')
 
 //setting middleware
 app.use(express.json())
-app.use(require('./router/auth'))
 app.use(cors({
     origin:["*"]
 }))
+app.use(require('./router/auth'))
 
 const PORT = process.env.PORT || 8000
 
