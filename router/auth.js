@@ -4,7 +4,8 @@ const express = require('express')
 const Router = express.Router();
 const cors = require('cors')
 Router.use(cors({
-    origin:["https://recipe-app-2be3.onrender.com"]
+    origin:["https://recipe-app-2be3.onrender.com"],
+    origin: ["http://localhost:3000"]
 }))
 
 
@@ -167,13 +168,62 @@ Router.get("/getRecipe",async(req,res)=>{
     })
     .catch(err=>{
         console.log(err)
-        return err
+        return 
     })
     
-    //total number of results
-    const n = response.length
-    //array element
-    let arr = new Array(n)
+    //function
+    //gettinf ingredients
+    const getIngredientList=(value)=>{
+        let ingredientList =[]
+        let substr = "strIngredient"
+        for(const key of Object.keys(value)){
+            if(key.includes(substr)){
+                let ingredient = value[key]
+                if((ingredient!=="")&&(ingredient!==null)){
+                    ingredientList.push(ingredient)
+                }                
+            }
+        }        
+        return ingredientList
+    }
+    //getting instructions
+    const getInstructions= (instructionStr) =>{
+        let instructions=[]
+        let sentence = ""
+        for(let letter of instructionStr){
+            if(letter === "."){
+                sentence = sentence + letter + " "
+            }else{
+                sentence =  sentence + letter
+            }
+        }
+        let words = sentence.split(' ')
+        sentence=""
+        for(let i=0;i<words.length;i++){
+            let word = words[i]
+            if(word.includes("\r\n")||word.includes("\r\r\n")||word.includes("\r\n\n")||word.includes("\n")){
+                instructions.push(sentence.trim())
+                word = word.replace("\r","")
+                word = word.replace("\n","")
+                sentence = word + " "
+            }else{
+                sentence = sentence + word + " "
+            }
+        }    
+        instructions.push(sentence.trim())    
+        return instructions
+    }
+    //object 
+    let data = {
+        id:"",
+        name:"",
+        category:"",
+        area:"",
+        image:"",
+        youtubeLink:"",
+        ingredientList:"",
+        instructions:""
+    }
     //mappin array
     response.map(value=>{
         let id = value.idMeal//id
@@ -182,16 +232,16 @@ Router.get("/getRecipe",async(req,res)=>{
         let area = value.strArea//area of food 
         let image = value.strMealThumb//image link of food
         let youtubeLink = value.strYoutube//youtube link of recipe
+        let ingredientList = getIngredientList(value)//getting ingredient list
+        let instructions = getInstructions(value.strInstructions)
 
-        const data = {
-            id,name,category,area,image,youtubeLink
+        data = {
+            id,name,category,area,image,youtubeLink,ingredientList,instructions
         }
-        arr.push(data)
         return
     })
     res.json({
-        totalResults:n,
-        data:arr
+        data
     })
 })
 
