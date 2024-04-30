@@ -4,8 +4,8 @@ const express = require('express')
 const Router = express.Router();
 const cors = require('cors')
 Router.use(cors({
-    origin:["https://recipe-app-2be3.onrender.com"],
-    origin: ["http://localhost:3000"]
+    origin:["https://recipe-app-2be3.onrender.com"]
+    // origin: ["http://localhost:3000"]
 }))
 
 
